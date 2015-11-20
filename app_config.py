@@ -48,8 +48,8 @@ DEFAULT_MAX_AGE = 20
 RELOAD_TRIGGER = False
 RELOAD_CHECK_INTERVAL = 60
 
-PRODUCTION_SERVERS = ['cron.nprapps.org']
-STAGING_SERVERS = ['cron-staging.nprapps.org']
+PRODUCTION_SERVERS = ['']
+STAGING_SERVERS = ['']
 
 # Should code be deployed to the web/cron servers?
 DEPLOY_TO_SERVERS = False
@@ -91,7 +91,7 @@ DEBUG = True
 """
 COPY EDITING
 """
-COPY_GOOGLE_DOC_KEY = '0AlXMOHKxzQVRdHZuX1UycXplRlBfLVB0UVNldHJYZmc'
+COPY_GOOGLE_DOC_KEY = '1tmVZeRWd9f27tWz1tZXd5AmAueL6fnuTjxTUtt-64zE'
 COPY_PATH = 'data/copy.xlsx'
 
 """
@@ -114,16 +114,16 @@ NPR_DFP = {
 SERVICES
 """
 NPR_GOOGLE_ANALYTICS = {
-    'ACCOUNT_ID': 'UA-5828686-4',
+    'ACCOUNT_ID': '',
     'DOMAIN': PRODUCTION_S3_BUCKET,
     'TOPICS': '' # e.g. '[1014,3,1003,1002,1001]'
 }
 
 VIZ_GOOGLE_ANALYTICS = {
-    'ACCOUNT_ID': 'UA-5828686-75'
+    'ACCOUNT_ID': 'UA-70022902-1'
 }
 
-DISQUS_API_KEY = 'tIbSzEhGBE9NIptbnQWn4wy1gZ546CsQ2IHHtxJiYAceyyPoAkDkVnQfCifmCaQW'
+DISQUS_API_KEY = ''
 DISQUS_UUID = '$NEW_DISQUS_UUID'
 
 """
@@ -184,7 +184,7 @@ def configure_targets(deployment_target):
         SERVERS = PRODUCTION_SERVERS
         SERVER_BASE_URL = 'http://%s/%s' % (SERVERS[0], PROJECT_SLUG)
         SERVER_LOG_PATH = '/var/log/%s' % PROJECT_FILENAME
-        DISQUS_SHORTNAME = 'npr-news'
+        DISQUS_SHORTNAME = ''
         DEBUG = False
         ASSETS_MAX_AGE = 86400
     elif deployment_target == 'staging':
