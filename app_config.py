@@ -17,6 +17,10 @@ from authomatic import Authomatic
 """
 NAMES
 """
+ORG_NAME = 'Mashable'
+ORG_TWITTER = '@mashable'
+ORG_LOGO_URL = '//mashgraphics-assets.s3.amazonaws.com/images/logo-mashable.svg'
+
 # Project name to be used in urls
 # Use dashes, not underscores!
 PROJECT_SLUG = '$NEW_PROJECT_SLUG'
@@ -37,11 +41,20 @@ ASSETS_SLUG = '$NEW_PROJECT_SLUG'
 """
 DEPLOYMENT
 """
-PRODUCTION_S3_BUCKET = 'mashgraphics-graphics'
+PRODUCTION_S3_BUCKET = {
+    'bucket_name': 'mashgraphics-graphics',
+    'region': 'us-east-1'
+}
 
-STAGING_S3_BUCKET = 'mashgraphics-stage'
+STAGING_S3_BUCKET = {
+    'bucket_name': 'mashgraphics-stage',
+    'region': 'us-east-1'
+}
 
-ASSETS_S3_BUCKET = 'mashgraphics-assets'
+ASSETS_S3_BUCKET = {
+    'bucket_name': 'mashgraphics-assets',
+    'region': 'us-east-1'
+}
 
 DEFAULT_MAX_AGE = 20
 
@@ -87,6 +100,7 @@ SERVERS = []
 SERVER_BASE_URL = None
 SERVER_LOG_PATH = None
 DEBUG = True
+ASSETS_URL = '//%s.s3-website-%s.amazonaws.com/%s' % (ASSETS_S3_BUCKET['bucket_name'],ASSETS_S3_BUCKET['region'], PROJECT_SLUG)
 
 """
 COPY EDITING
@@ -100,21 +114,10 @@ SHARING
 SHARE_URL = 'http://%s/%s/' % (PRODUCTION_S3_BUCKET, PROJECT_SLUG)
 
 """
-ADS
-"""
-
-NPR_DFP = {
-    'STORY_ID': '1002',
-    'TARGET': 'homepage',
-    'ENVIRONMENT': 'NPRTEST',
-    'TESTSERVER': 'false'
-}
-
-"""
 SERVICES
 """
-NPR_GOOGLE_ANALYTICS = {
-    'ACCOUNT_ID': '',
+MASHABLE_GOOGLE_ANALYTICS = {
+    'ACCOUNT_ID': 'UA-70022902-1',
     'DOMAIN': PRODUCTION_S3_BUCKET,
     'TOPICS': '' # e.g. '[1014,3,1003,1002,1001]'
 }
@@ -175,12 +178,13 @@ def configure_targets(deployment_target):
     global DEBUG
     global DEPLOYMENT_TARGET
     global DISQUS_SHORTNAME
-    global ASSETS_MAX_AGE
+    global ASSETS_MAX_AG
+    global ASSETS_URL
 
     if deployment_target == 'production':
         S3_BUCKET = PRODUCTION_S3_BUCKET
-        S3_BASE_URL = 'http://%s/%s' % (S3_BUCKET, PROJECT_SLUG)
-        S3_DEPLOY_URL = 's3://%s/%s' % (S3_BUCKET, PROJECT_SLUG)
+        S3_BASE_URL = 'http://%s.s3-website-%s.amazonaws.com/%s' % (S3_BUCKET['bucket_name'], S3_BUCKET['region'], PROJECT_SLUG)
+        S3_DEPLOY_URL = 's3://%s.s3-website-%s.amazonaws.com/%s' % (S3_BUCKET['bucket_name'], S3_BUCKET['region'], PROJECT_SLUG)
         SERVERS = PRODUCTION_SERVERS
         SERVER_BASE_URL = 'http://%s/%s' % (SERVERS[0], PROJECT_SLUG)
         SERVER_LOG_PATH = '/var/log/%s' % PROJECT_FILENAME
@@ -189,12 +193,12 @@ def configure_targets(deployment_target):
         ASSETS_MAX_AGE = 86400
     elif deployment_target == 'staging':
         S3_BUCKET = STAGING_S3_BUCKET
-        S3_BASE_URL = 'http://%s/%s' % (S3_BUCKET, PROJECT_SLUG)
-        S3_DEPLOY_URL = 's3://%s/%s' % (S3_BUCKET, PROJECT_SLUG)
+        S3_BASE_URL = 'http://%s.s3-website-%s.amazonaws.com/%s' % (S3_BUCKET['bucket_name'],S3_BUCKET['region'], PROJECT_SLUG)
+        S3_DEPLOY_URL = 's3://%s.s3-website-%s.amazonaws.com/%s' % (S3_BUCKET['bucket_name'],S3_BUCKET['region'], PROJECT_SLUG)
         SERVERS = STAGING_SERVERS
         SERVER_BASE_URL = 'http://%s/%s' % (SERVERS[0], PROJECT_SLUG)
         SERVER_LOG_PATH = '/var/log/%s' % PROJECT_FILENAME
-        DISQUS_SHORTNAME = 'nprviz-test'
+        DISQUS_SHORTNAME = ''
         DEBUG = True
         ASSETS_MAX_AGE = 20
     else:
@@ -204,7 +208,7 @@ def configure_targets(deployment_target):
         SERVERS = []
         SERVER_BASE_URL = 'http://127.0.0.1:8001/%s' % PROJECT_SLUG
         SERVER_LOG_PATH = '/tmp'
-        DISQUS_SHORTNAME = 'nprviz-test'
+        DISQUS_SHORTNAME = ''
         DEBUG = True
         ASSETS_MAX_AGE = 20
 
